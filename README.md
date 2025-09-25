@@ -7,8 +7,13 @@ mkdir -p ~/ros2cli_ws/src
 git clone https://github.com/vortexntnu/ros2cli.git ~/ros2cli_ws/src
 cd ~/ros2cli_ws 
 colcon build --packages-select ros2cli ros2pkg --allow-overriding ros2cli ros2pkg
-echo "source ~/ros2cli_ws/install/setup.bash" << ~/.bashrc
+echo "source ~/ros2cli_ws/install/setup.bash" >> ~/.bashrc
 source ~/.bashrc
+```
+
+Create a new ROS 2 C++ package with the Vortex template
+```bash
+ros2 pkg create --build-type vortex_cpp <your_pkg_name>
 ```
 
 # ros2cli
