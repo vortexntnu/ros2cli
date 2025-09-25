@@ -129,9 +129,29 @@ def create_package_environment(package, destination_directory):
     if package.get_build_type() == 'ament_python':
         print('creating source folder')
         source_directory = _create_folder(package.name, package_directory)
+    if package.get_build_type() == 'vortex_cpp':
+        source_directory = _create_folder('src', package_directory)
+        include_directory = _create_folder(package.name, package_directory + os.sep + 'include')
+        launch_directory = _create_folder('launch', package_directory)
+        config_directory = _create_folder('config', package_directory)
+        return package_directory, source_directory, include_directory, launch_directory, config_directory
 
     return package_directory, source_directory, include_directory
 
+def populate_config_and_launch(package, config_directory, launch_directory):
+    _create_template_file('vortex',
+                          'config.yaml.em',
+                          config_directory,
+                          'config.yaml',
+                          {})
+    launch_config = {
+        'package_name': package.name
+    }
+    _create_template_file('vortex',
+                          'launch.py.em',
+                          launch_directory,
+                          package.name + '.launch.py',
+                          launch_config)
 
 def populate_ament_python(package, package_directory, source_directory, python_node_name):
     setup_py_config = {
@@ -256,6 +276,20 @@ def populate_ament_cmake(package, package_directory, cpp_node_name, cpp_library_
         'dependencies': [str(dep) for dep in package.build_depends],
         'cpp_node_name': cpp_node_name,
         'cpp_library_name': cpp_library_name,
+    }
+    _create_template_file(
+        'ament_cmake',
+        'CMakeLists.txt.em',
+        package_directory,
+        'CMakeLists.txt',
+        cmakelists_config)
+    
+def populate_vortex_cpp(package, package_directory, node_name, library_name):
+    cmakelists_config = {
+        'project_name': package.name,
+        'dependencies': [str(dep) for dep in package.build_depends],
+        'cpp_node_name': node_name,
+        'cpp_library_name': library_name,
     }
     _create_template_file(
         'ament_cmake',
