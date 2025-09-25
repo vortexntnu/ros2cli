@@ -11,6 +11,11 @@ echo "source ~/ros2cli_ws/install/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+Create a new ROS 2 C++ package with the Vortex template
+```bash
+ros2 pkg create --build-type vortex_cpp <your_pkg_name>
+```
+
 # ros2cli
 
 This repository contains the source code for ROS 2 command line interface tools included with a standard install of any ROS 2 distro.
