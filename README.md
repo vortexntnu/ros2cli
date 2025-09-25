@@ -1,3 +1,16 @@
+# Vortex Fork
+
+One time setup:
+
+```bash
+mkdir -p ~/ros2cli_ws/src
+git clone https://github.com/vortexntnu/ros2cli.git ~/ros2cli_ws/src
+cd ~/ros2cli_ws 
+colcon build --packages-select ros2cli ros2pkg --allow-overriding ros2cli ros2pkg
+echo "source ~/ros2cli_ws/install/setup.bash" << ~/.bashrc
+source ~/.bashrc
+```
+
 # ros2cli
 
 This repository contains the source code for ROS 2 command line interface tools included with a standard install of any ROS 2 distro.
