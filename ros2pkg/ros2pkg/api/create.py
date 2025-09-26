@@ -113,15 +113,16 @@ def create_package_environment(package, destination_directory):
         print('creating source folder')
         source_directory = _create_folder(package.name, package_directory)
     if package.get_build_type() == 'vortex_cpp':
-        source_directory = _create_folder('src', package_directory)
-        include_directory = _create_folder(package.name, package_directory + os.sep + 'include')
+        source_directory = _create_folder('src' + os.sep + 'lib', package_directory)
+        include_directory_lib = _create_folder(package.name + os.sep + 'lib', package_directory + os.sep + 'include')
+        include_directory_ros = _create_folder(package.name + os.sep + 'ros', package_directory + os.sep + 'include')
         launch_directory = _create_folder('launch', package_directory)
         config_directory = _create_folder('config', package_directory)
-        return package_directory, source_directory, include_directory, launch_directory, config_directory
+        return package_directory, source_directory, include_directory_lib, include_directory_ros, launch_directory, config_directory
 
     return package_directory, source_directory, include_directory
 
-def populate_config_and_launch(package, config_directory, launch_directory):
+def populate_package(package, config_directory, launch_directory, source_directory, include_directory_lib, include_directory_ros):
     _create_template_file('vortex',
                           'config.yaml.em',
                           config_directory,

@@ -34,7 +34,7 @@ from ros2pkg.api.create import populate_cpp_node
 from ros2pkg.api.create import populate_python_libary
 from ros2pkg.api.create import populate_python_node
 from ros2pkg.api.create import populate_vortex_cpp
-from ros2pkg.api.create import populate_config_and_launch
+from ros2pkg.api.create import populate_package
 
 from ros2pkg.verb import VerbExtension
 
@@ -192,7 +192,7 @@ class CreateVerb(VerbExtension):
             package_directory, source_directory, include_directory = \
                 create_package_environment(package, args.destination_directory)
         else:
-            package_directory, source_directory, include_directory, launch_directory, config_directory = \
+            package_directory, source_directory, include_directory_lib, include_directory_ros, launch_directory, config_directory = \
                 create_package_environment(package, args.destination_directory)
         if not package_directory:
             return 'unable to create folder: ' + args.destination_directory
@@ -205,7 +205,7 @@ class CreateVerb(VerbExtension):
 
         if args.build_type == 'vortex_cpp':
             populate_vortex_cpp(package, package_directory, node_name, library_name)
-            populate_config_and_launch(package, config_directory, launch_directory)
+            populate_package(package, config_directory, launch_directory, source_directory, include_directory_lib, include_directory_ros)
 
         if args.build_type == 'ament_python':
             if not source_directory:
