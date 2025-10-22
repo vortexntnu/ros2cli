@@ -112,15 +112,38 @@ def create_package_environment(package, destination_directory):
     if package.get_build_type() == 'ament_python':
         print('creating source folder')
         source_directory = _create_folder(package.name, package_directory)
-    if package.get_build_type() == 'vortex_cpp':
-        source_directory = _create_folder('src' + os.sep + 'lib', package_directory)
-        include_directory_lib = _create_folder(package.name + os.sep + 'lib', package_directory + os.sep + 'include')
-        include_directory_ros = _create_folder(package.name + os.sep + 'ros', package_directory + os.sep + 'include')
-        launch_directory = _create_folder('launch', package_directory)
-        config_directory = _create_folder('config', package_directory)
-        return package_directory, source_directory, include_directory_lib, include_directory_ros, launch_directory, config_directory
 
     return package_directory, source_directory, include_directory
+
+def create_package_environment_vortex(package, destination_directory):
+    package_directory = _create_folder(package.name, destination_directory)
+
+    package_xml_config = {
+        'package_format': package.package_format,
+        'package_name': package.name,
+        'package_description': package.description,
+        'maintainer_email': package.maintainers[0].email,
+        'maintainer_name': package.maintainers[0].name,
+        'package_license': package.licenses[0],
+        'buildtool_dependencies': package.buildtool_depends,
+        'dependencies': package.build_depends,
+        'test_dependencies': package.test_depends,
+        'exports': package.exports,
+    }
+    _create_template_file(
+        'vortex',
+        'package.xml.em',
+        package_directory,
+        'package.xml',
+        package_xml_config)
+
+    source_directory = None
+    source_directory = _create_folder('src' + os.sep + 'lib', package_directory)
+    include_directory_lib = _create_folder(package.name + os.sep + 'lib', package_directory + os.sep + 'include')
+    include_directory_ros = _create_folder(package.name + os.sep + 'ros', package_directory + os.sep + 'include')
+    launch_directory = _create_folder('launch', package_directory)
+    config_directory = _create_folder('config', package_directory)
+    return package_directory, source_directory, include_directory_lib, include_directory_ros, launch_directory, config_directory
 
 def populate_package(package, config_directory, launch_directory, source_directory, include_directory_lib, include_directory_ros):
     _create_template_file('vortex',
@@ -271,7 +294,7 @@ def populate_vortex_cpp(package, package_directory, node_name, library_name):
         'cpp_library_name': library_name,
     }
     _create_template_file(
-        'ament_cmake',
+        'vortex',
         'CMakeLists.txt.em',
         package_directory,
         'CMakeLists.txt',

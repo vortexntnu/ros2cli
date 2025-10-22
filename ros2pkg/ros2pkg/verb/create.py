@@ -26,6 +26,7 @@ from catkin_pkg.package import Package
 from catkin_pkg.package import Person
 
 from ros2pkg.api.create import create_package_environment
+from ros2pkg.api.create import create_package_environment_vortex
 from ros2pkg.api.create import populate_ament_cmake
 from ros2pkg.api.create import populate_ament_python
 from ros2pkg.api.create import populate_cmake
@@ -135,7 +136,7 @@ class CreateVerb(VerbExtension):
                 print('[WARNING] renaming node to %s' % node_name, file=sys.stderr)
 
         buildtool_depends = []
-        if args.build_type == 'ament_cmake':
+        if args.build_type == 'ament_cmake' or args.build_type == 'vortex_cpp':
             if args.library_name:
                 buildtool_depends = ['ament_cmake_ros']
             else:
@@ -193,7 +194,7 @@ class CreateVerb(VerbExtension):
                 create_package_environment(package, args.destination_directory)
         else:
             package_directory, source_directory, include_directory_lib, include_directory_ros, launch_directory, config_directory = \
-                create_package_environment(package, args.destination_directory)
+                create_package_environment_vortex(package, args.destination_directory)
         if not package_directory:
             return 'unable to create folder: ' + args.destination_directory
 
